@@ -7,7 +7,7 @@ export const GradientBlobRight = () => {
 
   return (
     <motion.div 
-      className="absolute right-[0%] bottom-[15%]"
+      className="absolute right-[-5%] bottom-[23%]"
       style={{
         opacity,
         x,
