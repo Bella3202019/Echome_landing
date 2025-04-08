@@ -170,7 +170,7 @@ html,
   -moz-tab-size: 4; /* 3 */
   -o-tab-size: 4;
      tab-size: 4; /* 3 */
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
   font-feature-settings: normal; /* 5 */
   font-variation-settings: normal; /* 6 */
   -webkit-tap-highlight-color: transparent; /* 7 */
@@ -250,7 +250,7 @@ code,
 kbd,
 samp,
 pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
   font-feature-settings: normal; /* 2 */
   font-variation-settings: normal; /* 3 */
   font-size: 1em; /* 4 */
@@ -1294,7 +1294,7 @@ video {
   text-align: center;
 }
 .font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 .text-4xl {
   font-size: 2.25rem;
@@ -1517,6 +1517,29 @@ video {
 }
 .duration-300 {
   transition-duration: 300ms;
+}
+@keyframes enter {
+
+  from {
+    opacity: var(--tw-enter-opacity, 1);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1)) rotate(var(--tw-enter-rotate, 0));
+  }
+}
+@keyframes exit {
+
+  to {
+    opacity: var(--tw-exit-opacity, 1);
+    transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
+  }
+}
+.duration-200 {
+  animation-duration: 200ms;
+}
+.duration-300 {
+  animation-duration: 300ms;
+}
+.paused {
+  animation-play-state: paused;
 }
  
 .file\:border-0::file-selector-button {
@@ -1747,6 +1770,74 @@ video {
  
 .data-\[disabled\]\:opacity-50[data-disabled] {
   opacity: 0.5;
+}
+ 
+.data-\[state\=open\]\:animate-in[data-state="open"] {
+  animation-name: enter;
+  animation-duration: 150ms;
+  --tw-enter-opacity: initial;
+  --tw-enter-scale: initial;
+  --tw-enter-rotate: initial;
+  --tw-enter-translate-x: initial;
+  --tw-enter-translate-y: initial;
+}
+ 
+.data-\[state\=closed\]\:animate-out[data-state="closed"] {
+  animation-name: exit;
+  animation-duration: 150ms;
+  --tw-exit-opacity: initial;
+  --tw-exit-scale: initial;
+  --tw-exit-rotate: initial;
+  --tw-exit-translate-x: initial;
+  --tw-exit-translate-y: initial;
+}
+ 
+.data-\[state\=closed\]\:fade-out-0[data-state="closed"] {
+  --tw-exit-opacity: 0;
+}
+ 
+.data-\[state\=open\]\:fade-in-0[data-state="open"] {
+  --tw-enter-opacity: 0;
+}
+ 
+.data-\[state\=closed\]\:zoom-out-95[data-state="closed"] {
+  --tw-exit-scale: .95;
+}
+ 
+.data-\[state\=open\]\:zoom-in-95[data-state="open"] {
+  --tw-enter-scale: .95;
+}
+ 
+.data-\[side\=bottom\]\:slide-in-from-top-2[data-side="bottom"] {
+  --tw-enter-translate-y: -0.5rem;
+}
+ 
+.data-\[side\=left\]\:slide-in-from-right-2[data-side="left"] {
+  --tw-enter-translate-x: 0.5rem;
+}
+ 
+.data-\[side\=right\]\:slide-in-from-left-2[data-side="right"] {
+  --tw-enter-translate-x: -0.5rem;
+}
+ 
+.data-\[side\=top\]\:slide-in-from-bottom-2[data-side="top"] {
+  --tw-enter-translate-y: 0.5rem;
+}
+ 
+.data-\[state\=closed\]\:slide-out-to-left-1\/2[data-state="closed"] {
+  --tw-exit-translate-x: -50%;
+}
+ 
+.data-\[state\=closed\]\:slide-out-to-top-\[48\%\][data-state="closed"] {
+  --tw-exit-translate-y: -48%;
+}
+ 
+.data-\[state\=open\]\:slide-in-from-left-1\/2[data-state="open"] {
+  --tw-enter-translate-x: -50%;
+}
+ 
+.data-\[state\=open\]\:slide-in-from-top-\[48\%\][data-state="open"] {
+  --tw-enter-translate-y: -48%;
 }
  
 .dark\:block:is(.dark *) {
