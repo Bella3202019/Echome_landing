@@ -5,6 +5,7 @@ import { lora } from "./fonts";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { GradientBlob } from "./components/GradientBlob";
 import { GradientBlobRight } from "./components/GradientBlobRight";
 import { useRef, useState, useEffect } from "react";
@@ -602,6 +603,20 @@ export default function Home() {
       >
         About
       </Link>
+
+      {/* Echome Logo */}
+      <div className="fixed top-4 left-8 z-50">
+        <Link href="https://echome.im">
+          <Image 
+            src="/assets/Echome_logo_square.png"
+            alt="Echome Logo"
+            width={40}
+            height={12}
+            className="object-contain"
+          />
+        </Link>
+      </div>
+
     </motion.main>
   );
 } 
