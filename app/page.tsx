@@ -30,6 +30,10 @@ export default function Home() {
     anxious: false
   });
 
+  // 移动端卡片滑动状态
+  const [activeCardIndex, setActiveCardIndex] = useState(1); // 0=左, 1=中, 2=右
+  const [touchStartX, setTouchStartX] = useState(0);
+
   // 监控整体滚动以控制背景
   const { scrollYProgress: mainScrollProgress } = useScroll({
     target: containerRef,
@@ -137,6 +141,33 @@ export default function Home() {
     }
   };
 
+  // 处理卡片触摸开始事件
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  // 处理卡片触摸结束事件
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchEndX - touchStartX;
+    
+    // 如果滑动距离足够大，切换卡片
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0) {
+        // 向右滑动，显示上一张卡片
+        setActiveCardIndex(prev => Math.max(prev - 1, 0));
+      } else {
+        // 向左滑动，显示下一张卡片
+        setActiveCardIndex(prev => Math.min(prev + 1, 2));
+      }
+    }
+  };
+
+  // 切换到指定的卡片
+  const goToCard = (index: number) => {
+    setActiveCardIndex(index);
+  };
+
   return (
     <motion.main 
       ref={containerRef}
@@ -180,8 +211,8 @@ export default function Home() {
         >
           <motion.h1 
             className={cn(
-              "text-5xl md:text-7xl font-medium",
-              "mb-12 leading-tight",
+              "text-4xl sm:text-5xl md:text-7xl font-medium",
+              "mb-8 sm:mb-12 leading-tight",
               "max-w-4xl"
             )}
             initial={{ opacity: 0, y: 20 }}
@@ -195,11 +226,12 @@ export default function Home() {
           
           <motion.p 
             className={cn(
-              "text-lg md:text-xl",
+              "text-base sm:text-lg md:text-xl",
               "text-zinc-400",
               "max-w-2xl mx-auto",
-              "mb-12",
-              "opacity-80"
+              "mb-8 sm:mb-12",
+              "opacity-80",
+              "px-4"
             )}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -219,8 +251,8 @@ export default function Home() {
                 className={cn(
                   "bg-white text-black hover:bg-zinc-200",
                   "rounded-full",
-                  "px-8 py-6",
-                  "text-lg",
+                  "px-6 py-5 sm:px-8 sm:py-6",
+                  "text-base sm:text-lg",
                   "transition-all duration-300",
                 )}
               >
@@ -268,7 +300,7 @@ export default function Home() {
           y: secondSectionY,
         }}
         className={cn(
-          "h-screen",
+          "min-h-screen",
           "flex flex-col items-center",
           "px-4 md:px-8",
           "relative",
@@ -280,35 +312,36 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
           viewport={{ once: true, margin: "-20%" }}
-          className="text-center mt-32 mb-32"
+          className="text-center mt-24 sm:mt-32 mb-16 sm:mb-32"
         >
           <h2 className={cn(
-            "text-4xl md:text-6xl font-medium",
-            "mb-12",
-            "max-w-7xl"
+            "text-3xl sm:text-4xl md:text-6xl font-medium",
+            "mb-8 sm:mb-12",
+            "max-w-7xl",
+            "px-2"
           )}>
             Echo remember what you might have missed
-            <br />
+            <br className="hidden sm:block" />
             the moments that shape who you are
           </h2>
           <p className={cn(
-            "text-lg md:text-xl",
+            "text-base sm:text-lg md:text-xl",
             "text-zinc-400",
             "max-w-2xl mx-auto",
+            "px-4"
           )}>
-  
             Echo your feelings, thoughts and special moments through emotions
           </p>
         </motion.div>
 
         {/* Quotes Container */}
-        <div className="relative w-full max-w-6xl mx-auto h-[600px] mb-32">
+        <div className="relative w-full max-w-6xl mx-auto h-[650px] sm:h-[600px] mb-16 sm:mb-32">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
             viewport={{ once: true }}
-            className="absolute left-[20%] top-0 text-center flex items-center gap-8"
+            className="absolute md:left-[20%] sm:left-[10%] left-[5%] top-0 text-center flex flex-wrap md:flex-nowrap items-center gap-4 sm:gap-8 max-w-[90%] sm:max-w-none"
           >
             <motion.div 
               className="flex flex-col items-center"
@@ -316,11 +349,11 @@ export default function Home() {
               animate={showEmotions.happiness ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-20 h-20 rounded-full bg-yellow-400 blur-sm opacity-70" />
-              <p className="mt-4 text-base text-yellow-400 leading-none">Happiness</p>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-yellow-400 blur-sm opacity-70" />
+              <p className="mt-2 sm:mt-4 text-sm sm:text-base text-yellow-400 leading-none">Happiness</p>
             </motion.div>
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
+              className="text-base sm:text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
               whileHover={{ scale: 1.02 }}
               onClick={() => toggleEmotion('happiness')}
             >
@@ -337,10 +370,10 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
             viewport={{ once: true }}
-            className="absolute right-[10%] top-[10%] text-center flex items-center gap-8"
+            className="absolute md:right-[10%] sm:right-[5%] right-[2%] md:top-[10%] top-[25%] text-center flex flex-wrap md:flex-nowrap items-center gap-4 sm:gap-8 max-w-[90%] sm:max-w-none"
           >
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
+              className="text-base sm:text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer order-1 sm:order-1"
               whileHover={{ scale: 1.02 }}
               onClick={() => toggleEmotion('nostalgia')}
             >
@@ -349,13 +382,13 @@ export default function Home() {
               mom used to make.
             </motion.p>
             <motion.div 
-              className="flex flex-col items-center"
+              className="flex flex-col items-center order-2 sm:order-2"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={showEmotions.nostalgia ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-20 h-20 rounded-full bg-cyan-400 blur-sm opacity-70" />
-              <p className="mt-4 text-base text-cyan-400 leading-none">Nostalgia</p>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-cyan-400 blur-sm opacity-70" />
+              <p className="mt-2 sm:mt-4 text-sm sm:text-base text-cyan-400 leading-none">Nostalgia</p>
             </motion.div>
           </motion.div>
 
@@ -364,7 +397,7 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
             viewport={{ once: true }}
-            className="absolute left-[5%] bottom-[13%] text-center flex items-center gap-8"
+            className="absolute md:left-[5%] sm:left-[2%] left-[0%] md:bottom-[45%] bottom-[40%] text-center flex flex-wrap md:flex-nowrap items-center gap-4 sm:gap-8 max-w-[90%] sm:max-w-none"
           >
             <motion.div 
               className="flex flex-col items-center"
@@ -372,11 +405,11 @@ export default function Home() {
               animate={showEmotions.regret ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-20 h-20 rounded-full bg-pink-400 blur-sm opacity-70" />
-              <p className="mt-4 text-base text-pink-400 leading-none">Regret</p>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-pink-400 blur-sm opacity-70" />
+              <p className="mt-2 sm:mt-4 text-sm sm:text-base text-pink-400 leading-none">Regret</p>
             </motion.div>
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
+              className="text-base sm:text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
               whileHover={{ scale: 1.02 }}
               onClick={() => toggleEmotion('regret')}
             >
@@ -393,10 +426,10 @@ export default function Home() {
             whileInView={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
             viewport={{ once: true }}
-            className="absolute right-[23%] bottom-[0%] text-center flex items-center gap-8"
+            className="absolute md:right-[23%] sm:right-[15%] right-[5%] md:bottom-[35%] bottom-[15%] text-center flex flex-wrap md:flex-nowrap items-center gap-4 sm:gap-8 max-w-[90%] sm:max-w-none"
           >
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer"
+              className="text-base sm:text-lg md:text-xl text-zinc-300 whitespace-pre-line cursor-pointer order-1 sm:order-1"
               whileHover={{ scale: 1.02 }}
               onClick={() => toggleEmotion('anxious')}
             >
@@ -407,13 +440,13 @@ export default function Home() {
               just trying to keep up.
             </motion.p>
             <motion.div 
-              className="flex flex-col items-center"
+              className="flex flex-col items-center order-2 sm:order-2"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={showEmotions.anxious ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="w-20 h-20 rounded-full bg-blue-400 blur-sm opacity-70" />
-              <p className="mt-4 text-base text-blue-400 leading-none">Anxious</p>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-400 blur-sm opacity-70" />
+              <p className="mt-2 sm:mt-4 text-sm sm:text-base text-blue-400 leading-none">Anxious</p>
             </motion.div>
           </motion.div>
         </div>
@@ -434,128 +467,260 @@ export default function Home() {
       <motion.section
         ref={thirdSectionRef}
         className={cn(
-          "h-screen",
+          "min-h-screen",
           "flex flex-col items-center",
           "px-4 md:px-8",
-          "pt-20 pb-10",
+          "pt-16 sm:pt-20 pb-10",
           "relative",
           "snap-start",
           "gap-0"
         )}
       >
         {/* Cards Container */}
-        <div className="relative w-full max-w-7xl mx-auto flex justify-center items-end" style={{ height: '55vh', perspective: '1000px' }}>
-          {/* Left Card */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              left: leftCardX,
-              x: leftCardTranslateX,
-              rotate: leftCardRotate,
-              scale: cardsScale,
-              opacity: cardsOpacity,
-              zIndex: leftCardZ,
-              transformOrigin: 'center center',
-            }}
-            className="transform"
-          >
-            <div className={cn(
-              "bg-white rounded-3xl p-6",
-              "w-[300px] h-[380px]",
-              "flex flex-col",
-              "shadow-lg",
-              "transform hover:scale-105 transition-transform duration-300"
-            )}>
-              <div className="mb-4">
-                <div className="text-black/60">Fri, Jan 12</div>
+        <div 
+          className="relative w-full max-w-7xl mx-auto flex justify-center items-end" 
+          style={{ height: '55vh', minHeight: '280px', maxHeight: '400px', perspective: '1000px' }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Desktop Cards - Hidden on Mobile */}
+          <div className="hidden md:block w-full h-full relative">
+            {/* Left Card */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                left: leftCardX,
+                x: leftCardTranslateX,
+                rotate: leftCardRotate,
+                scale: cardsScale,
+                opacity: cardsOpacity,
+                zIndex: leftCardZ,
+                transformOrigin: 'center center',
+              }}
+              className="transform" 
+            >
+              <div className={cn(
+                "bg-white rounded-3xl p-6",
+                "w-[300px] h-[380px]",
+                "flex flex-col",
+                "shadow-lg",
+                "transform hover:scale-105 transition-transform duration-300"
+              )}>
+                <div className="mb-4">
+                  <div className="text-black/60">Fri, Jan 12</div>
+                </div>
+                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-yellow-300/90 to-yellow-400/90 mb-6 opacity-95 relative">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                </div>
+                <p className="text-black/80 text-lg">
+                  Morning run in Mission Bay as usual, meditated by the water, the breeze was so clean
+                </p>
               </div>
-              <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-yellow-300/90 to-yellow-400/90 mb-6 opacity-95 relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
-              </div>
-              <p className="text-black/80 text-lg">
-                Morning run in Mission Bay as usual, meditated by the water, the breeze was so clean
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Center Card */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              x: '-50%',
-              y: centerCardY,
-              scale: cardsScale,
-              opacity: cardsOpacity,
-              zIndex: centerCardZ,
-              transformOrigin: 'center center',
-            }}
-            className="transform"
-          >
-            <div className={cn(
-              "bg-white rounded-3xl p-6",
-              "w-[300px] h-[380px]",
-              "flex flex-col",
-              "shadow-lg",
-              "transform hover:scale-105 transition-transform duration-300"
-            )}>
-              <div className="mb-4">
-                <div className="text-black/60">Wed, April 2</div>
+            {/* Center Card */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                x: '-50%',
+                y: centerCardY,
+                scale: cardsScale,
+                opacity: cardsOpacity,
+                zIndex: centerCardZ,
+                transformOrigin: 'center center',
+              }}
+              className="transform" 
+            >
+              <div className={cn(
+                "bg-white rounded-3xl p-6",
+                "w-[300px] h-[380px]",
+                "flex flex-col",
+                "shadow-lg",
+                "transform hover:scale-105 transition-transform duration-300"
+              )}>
+                <div className="mb-4">
+                  <div className="text-black/60">Wed, April 2</div>
+                </div>
+                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-emerald-400/90 to-emerald-500/90 mb-6 opacity-95 relative">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                </div>
+                <p className="text-black/80 text-lg">
+                  Acai bowl, morning workout, the day my love arrives from across the ocean
+                </p>
               </div>
-              <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-emerald-400/90 to-emerald-500/90 mb-6 opacity-95 relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
-              </div>
-              <p className="text-black/80 text-lg">
-                Acai bowl, morning workout, the day my love arrives from across the ocean
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Right Card */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              left: rightCardX,
-              x: rightCardTranslateX,
-              rotate: rightCardRotate,
-              scale: cardsScale,
-              opacity: cardsOpacity,
-              zIndex: rightCardZ,
-              transformOrigin: 'center center',
-            }}
-            className="transform"
-          >
-            <div className={cn(
-              "bg-white rounded-3xl p-6",
-              "w-[300px] h-[380px]",
-              "flex flex-col",
-              "shadow-lg",
-              "transform hover:scale-105 transition-transform duration-300"
-            )}>
-              <div className="mb-4">
-                <div className="text-black/60">Fri, April 4</div>
+            {/* Right Card */}
+            <motion.div
+              style={{
+                position: 'absolute',
+                left: rightCardX,
+                x: rightCardTranslateX,
+                rotate: rightCardRotate,
+                scale: cardsScale,
+                opacity: cardsOpacity,
+                zIndex: rightCardZ,
+                transformOrigin: 'center center',
+              }}
+              className="transform" 
+            >
+              <div className={cn(
+                "bg-white rounded-3xl p-6",
+                "w-[300px] h-[380px]",
+                "flex flex-col",
+                "shadow-lg",
+                "transform hover:scale-105 transition-transform duration-300"
+              )}>
+                <div className="mb-4">
+                  <div className="text-black/60">Fri, April 4</div>
+                </div>
+                <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-blue-300/90 to-blue-400/90 mb-6 opacity-95 relative">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                </div>
+                <p className="text-black/80 text-lg">
+                  Evening walk in Marina, the sunset painting the sky in colors I've never seen 
+                </p>
               </div>
-              <div className="w-full h-48 rounded-2xl bg-gradient-to-br from-blue-300/90 to-blue-400/90 mb-6 opacity-95 relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
-              </div>
-              <p className="text-black/80 text-lg">
-                Evening walk in Marina, the sunset painting the sky in colors I've never seen 
-              </p>
+            </motion.div>
+          </div>
+
+          {/* Mobile Swipeable Cards - Shown only on mobile */}
+          <div className="md:hidden w-full h-full relative flex items-center justify-center">
+            <div className="relative w-[250px] h-[290px]">
+              {/* Left Card (Card 0) */}
+              <motion.div
+                animate={{
+                  x: activeCardIndex === 0 ? 0 : activeCardIndex === 1 ? -25 : -50,
+                  y: activeCardIndex === 0 ? 0 : activeCardIndex === 1 ? 0 : 0,
+                  scale: activeCardIndex === 0 ? 1 : 0.9,
+                  rotate: activeCardIndex === 0 ? -20 : -10,
+                  opacity: activeCardIndex === 0 ? 1 : 0.7,
+                  zIndex: activeCardIndex === 0 ? 3 : 1
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="absolute top-0 left-0 w-full h-full"
+                style={{ transformOrigin: 'center center' }}
+              >
+                <div className={cn(
+                  "bg-white rounded-3xl p-3",
+                  "w-full h-full",
+                  "flex flex-col",
+                  "shadow-lg",
+                  "transform hover:scale-105 transition-transform duration-300"
+                )}>
+                  <div className="mb-2">
+                    <div className="text-black/60 text-sm">Fri, Jan 12</div>
+                  </div>
+                  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-yellow-300/90 to-yellow-400/90 mb-2 opacity-95 relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                  </div>
+                  <p className="text-black/80 text-sm">
+                    Morning run in Mission Bay as usual, meditated by the water, the breeze was so clean
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Center Card (Card 1) */}
+              <motion.div
+                animate={{
+                  x: activeCardIndex === 0 ? 25 : activeCardIndex === 1 ? 0 : -25,
+                  y: activeCardIndex === 1 ? -10 : 0,
+                  scale: activeCardIndex === 1 ? 1 : 0.9,
+                  rotate: 0,
+                  opacity: activeCardIndex === 1 ? 1 : 0.7,
+                  zIndex: activeCardIndex === 1 ? 3 : 2
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="absolute top-0 left-0 w-full h-full"
+                style={{ transformOrigin: 'center center' }}
+              >
+                <div className={cn(
+                  "bg-white rounded-3xl p-3",
+                  "w-full h-full",
+                  "flex flex-col",
+                  "shadow-lg",
+                  "transform hover:scale-105 transition-transform duration-300"
+                )}>
+                  <div className="mb-2">
+                    <div className="text-black/60 text-sm">Wed, April 2</div>
+                  </div>
+                  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-emerald-400/90 to-emerald-500/90 mb-2 opacity-95 relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                  </div>
+                  <p className="text-black/80 text-sm">
+                    Acai bowl, morning workout, the day my love arrives from across the ocean
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Right Card (Card 2) */}
+              <motion.div
+                animate={{
+                  x: activeCardIndex === 2 ? 0 : activeCardIndex === 1 ? 25 : 50,
+                  y: activeCardIndex === 2 ? 0 : activeCardIndex === 1 ? 0 : 0,
+                  scale: activeCardIndex === 2 ? 1 : 0.9,
+                  rotate: activeCardIndex === 2 ? 20 : 10,
+                  opacity: activeCardIndex === 2 ? 1 : 0.7,
+                  zIndex: activeCardIndex === 2 ? 3 : 1
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="absolute top-0 left-0 w-full h-full"
+                style={{ transformOrigin: 'center center' }}
+              >
+                <div className={cn(
+                  "bg-white rounded-3xl p-3",
+                  "w-full h-full",
+                  "flex flex-col",
+                  "shadow-lg",
+                  "transform hover:scale-105 transition-transform duration-300"
+                )}>
+                  <div className="mb-2">
+                    <div className="text-black/60 text-sm">Fri, April 4</div>
+                  </div>
+                  <div className="w-full h-32 rounded-2xl bg-gradient-to-br from-blue-300/90 to-blue-400/90 mb-2 opacity-95 relative">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:10px_10px] opacity-50" />
+                  </div>
+                  <p className="text-black/80 text-sm">
+                    Evening walk in Marina, the sunset painting the sky in colors I've never seen 
+                  </p>
+                </div>
+              </motion.div>
             </div>
-          </motion.div>
+
+            {/* Card Indicators */}
+            <div className="absolute bottom-[-40px] left-0 right-0 flex justify-center gap-2">
+              <button 
+                onClick={() => goToCard(0)}
+                className={`w-2 h-2 rounded-full ${activeCardIndex === 0 ? 'bg-white' : 'bg-white/40'}`}
+                aria-label="Go to card 1"
+              />
+              <button 
+                onClick={() => goToCard(1)}
+                className={`w-2 h-2 rounded-full ${activeCardIndex === 1 ? 'bg-white' : 'bg-white/40'}`}
+                aria-label="Go to card 2"
+              />
+              <button 
+                onClick={() => goToCard(2)}
+                className={`w-2 h-2 rounded-full ${activeCardIndex === 2 ? 'bg-white' : 'bg-white/40'}`}
+                aria-label="Go to card 3"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Bottom Title and CTA */}
-        <div className="flex flex-col items-center mt-12">
+        <div className="flex flex-col items-center mt-2 sm:mt-12">
           <motion.h2
             style={{
               opacity: cardsOpacity,
               scale: cardsScale,
             }}
             className={cn(
-              "text-4xl md:text-6xl",
+              "text-3xl sm:text-4xl md:text-6xl",
               "text-center",
-              "-mt-15",
+              "-mt-0 sm:-mt-15",
+              "px-4",
               lora.className
             )}
           >
@@ -569,7 +734,7 @@ export default function Home() {
               opacity: cardsOpacity,
               scale: cardsScale,
             }}
-            className="mt-12"
+            className="mt-6 sm:mt-12"
           >
             <Link href="https://www.echome.chat/">
               <Button
@@ -577,8 +742,8 @@ export default function Home() {
                 className={cn(
                   "bg-white text-black hover:bg-zinc-200",
                   "rounded-full",
-                  "px-8 py-6",
-                  "text-lg",
+                  "px-6 py-4 sm:px-8 sm:py-6",
+                  "text-base sm:text-lg",
                   "transition-all duration-300",
                   "shadow-lg hover:shadow-xl",
                   "transform hover:scale-105"
@@ -606,7 +771,15 @@ export default function Home() {
 
       {/* Echome Logo */}
       <div className="fixed top-4 left-8 z-50">
-        <Link href="https://echome.im">
+        <Link 
+          href="https://echome.im" 
+          onClick={(e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 如果希望同时也导航到链接，可以使用延时
+
+          }}
+        >
           <Image 
             src="/assets/Echome_logo_square.png"
             alt="Echome Logo"
