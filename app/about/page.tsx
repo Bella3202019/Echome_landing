@@ -22,10 +22,13 @@ export default function AboutPage() {
       >
         <Button
           variant="ghost"
-          className="text-zinc-400 hover:text-white"
+          className="text-zinc-400 hover:text-white group relative overflow-hidden transition-all duration-300"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
+          <span className="relative z-10 flex items-center">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back
+          </span>
+          <span className="absolute inset-0 bg-white/10 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md"></span>
         </Button>
       </Link>
 

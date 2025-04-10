@@ -1127,6 +1127,9 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity, 1));
 }
+.bg-white\/10 {
+  background-color: rgb(255 255 255 / 0.1);
+}
 .bg-\[radial-gradient\(circle_at_center\2c rgba\(255\2c 255\2c 255\2c 0\.1\)_1px\2c transparent_1px\)\] {
   background-image: radial-gradient(circle at center,rgba(255,255,255,0.1) 1px,transparent 1px);
 }
@@ -1429,6 +1432,9 @@ video {
 }
 .opacity-95 {
   opacity: 0.95;
+}
+.opacity-0 {
+  opacity: 0;
 }
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -1746,6 +1752,10 @@ video {
  
 .disabled\:opacity-50:disabled {
   opacity: 0.5;
+}
+ 
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
 }
  
 .data-\[disabled\]\:pointer-events-none[data-disabled] {
