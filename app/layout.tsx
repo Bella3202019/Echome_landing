@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { cn } from "@/utils";
 import { Providers } from "@/components/providers";
+import { AudioPlayer } from "./components/AudioPlayer";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
@@ -60,6 +61,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <AudioPlayer />
         </Providers>
       </body>
     </html>

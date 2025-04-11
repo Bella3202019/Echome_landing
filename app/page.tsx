@@ -245,7 +245,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.6 }}
           >
-            <Link href="https://www.echome.chat/">
+            <Link href="https://www.echome.chat/" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 className={cn(
@@ -736,7 +736,7 @@ export default function Home() {
             }}
             className="mt-6 sm:mt-12"
           >
-            <Link href="https://www.echome.chat/">
+            <Link href="https://www.echome.chat/" target="_blank" rel="noopener noreferrer">
               <Button
                 size="lg"
                 className={cn(
