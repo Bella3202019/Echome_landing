@@ -787,7 +787,7 @@ export default function Home() {
               href="/privacy"
               className={cn(
                 "text-white/80 hover:text-white",
-                "text-sm sm:text-base",
+                "text-sm font-medium",
                 "transition-colors duration-200"
               )}
             >
