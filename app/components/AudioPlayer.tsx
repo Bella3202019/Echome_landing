@@ -13,22 +13,25 @@ export function AudioPlayer() {
     const savedMuteState = localStorage.getItem('isMuted');
     if (savedMuteState !== null) {
       setIsMuted(savedMuteState === 'true');
+    } else {
+      // If no saved state, default to muted
+      localStorage.setItem('isMuted', 'true');
     }
     
     // Setup audio element
     if (audioRef.current) {
       audioRef.current.volume = 0.5;
       audioRef.current.loop = true;
-      audioRef.current.muted = isMuted;
+      audioRef.current.muted = true; // Always start muted
       
-      // Attempt to start playing (may be blocked by browser autoplay policy)
-      const playPromise = audioRef.current.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          // Auto-play was prevented
-          console.log("Autoplay prevented:", error);
-        });
+      // Only attempt to play if explicitly unmuted
+      if (!isMuted) {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay prevented:", error);
+          });
+        }
       }
     }
   }, []);
@@ -38,6 +41,16 @@ export function AudioPlayer() {
     if (audioRef.current) {
       audioRef.current.muted = isMuted;
       localStorage.setItem('isMuted', isMuted.toString());
+      
+      // Only attempt to play when explicitly unmuted
+      if (!isMuted && audioRef.current.paused) {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Play prevented:", error);
+          });
+        }
+      }
     }
   }, [isMuted]);
 

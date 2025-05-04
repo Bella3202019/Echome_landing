@@ -211,7 +211,7 @@ export default function Home() {
         >
           <motion.h1 
             className={cn(
-              "text-4xl sm:text-5xl md:text-7xl font-medium",
+              "text-3xl sm:text-4xl md:text-7xl font-medium",
               "mb-8 sm:mb-12 leading-tight",
               "max-w-4xl"
             )}
@@ -315,13 +315,13 @@ export default function Home() {
           className="text-center mt-24 sm:mt-32 mb-16 sm:mb-32"
         >
           <h2 className={cn(
-            "text-3xl sm:text-4xl md:text-6xl font-medium",
+            "text-2xl sm:text-3xl md:text-6xl font-medium",
             "mb-8 sm:mb-12",
             "max-w-7xl",
             "px-2"
           )}>
             Echo remember what you might have missed
-            <br className="hidden sm:block" />
+            <br />
             the moments that shape who you are
           </h2>
           <p className={cn(
